@@ -1,0 +1,11 @@
+{
+    "github.copilot.chat.codeGeneration.instructions": [
+    {
+        "file": "../terraform-standards.md"
+    },
+    {
+        "text": "In Terraform, always avoid hardcoding values - use variables or locals"
+    }
+    ]
+  }
+  
