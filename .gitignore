@@ -1,0 +1,22 @@
+# Ignore Terraform plan files
+*.tfplan
+*.tfstate
+*.tfstate.backup
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore Terraform variables files
+*.tfvars
+
+# Ignore Terraform state files
+.terraform/
+
+# Ignore Terraform lock files
+*.lock
+
+# Ignore Terraform provider binaries
+terraform-provider-*
+
+# Ignore Terraform CLI configuration files
+terraform.rc
