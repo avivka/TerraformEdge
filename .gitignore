@@ -11,6 +11,7 @@
 
 # Ignore Terraform state files
 .terraform/
+.terraform.lock.hcl
 
 # Ignore Terraform lock files
 *.lock
