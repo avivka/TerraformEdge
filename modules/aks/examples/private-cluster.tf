@@ -1,3 +1,5 @@
+# AVM-Compliant AKS Module
+# This module follows Azure Verified Modules standards for AKS deployment
 # Example: Private AKS Cluster with Enhanced Security
 # This example demonstrates how to create a production-ready private AKS cluster
 
@@ -6,7 +8,7 @@ data "azurerm_client_config" "current" {}
 
 # Create the private AKS cluster using the improved module
 module "private_aks" {
-  source = "./Modules/aks_improved"
+  source = "./modules/aks_improved"
 
   # Basic configuration
   cluster_name        = "private-aks-cluster"
@@ -70,7 +72,6 @@ module "private_aks" {
       os_disk_type        = "Ephemeral"
       max_pods            = 30
       mode                = "User"
-      
       upgrade_settings = {
         max_surge = "33%"
       }
@@ -118,10 +119,6 @@ module "private_aks" {
     allowed = [
       {
         day   = "Saturday"
-        hours = [0, 1, 2, 3, 4, 5, 6, 7]
-      },
-      {
-        day   = "Sunday"
         hours = [0, 1, 2, 3, 4, 5, 6, 7]
       }
     ]

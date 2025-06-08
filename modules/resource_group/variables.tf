@@ -1,23 +1,6 @@
 variable "name" {
-  description = "The name of the resource group"
+  description = "The name of the existing resource group"
   type        = string
-}
-
-variable "location" {
-  description = "The Azure region where the resource group should be created"
-  type        = string
-}
-
-variable "tags" {
-  description = "A mapping of tags to assign to the resource group"
-  type        = map(string)
-  default     = {}
-}
-
-variable "prevent_resource_group_deletion" {
-  description = "Should the resource group be protected from accidental deletion?"
-  type        = bool
-  default     = false
 }
 
 variable "lock" {

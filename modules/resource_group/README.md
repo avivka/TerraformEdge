@@ -1,13 +1,13 @@
 # Azure Resource Group Terraform Module
 
-This module creates an Azure Resource Group following Azure Verified Modules (AVM) best practices.
+This module references an existing Azure Resource Group and provides optional resource locking capability.
 
 ## Features
 
-- Creates a single Azure Resource Group
+- References an existing Azure Resource Group via data source
 - Optional resource locking capability
 - Follows Azure Verified Modules best practices
-- Supports tags
+- Outputs resource group information for use in other modules
 
 ## Usage
 
@@ -15,20 +15,13 @@ This module creates an Azure Resource Group following Azure Verified Modules (AV
 module "resource_group" {
   source = "./Modules/resource_group"
 
-  name     = "my-resource-group"
-  location = "eastus2"
+  name = "existing-resource-group"
   
   # Optional: Enable resource locking
   lock = {
     name  = "resource-lock"
     kind  = "CanNotDelete"
     notes = "Locked to prevent accidental deletion"
-  }
-  
-  # Optional: Add tags
-  tags = {
-    Environment = "Production"
-    Owner       = "Team"
   }
 }
 ```
@@ -37,11 +30,8 @@ module "resource_group" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
-| name | The name of the resource group | string | n/a | yes |
-| location | The Azure region where the resource group should be created | string | n/a | yes |
-| prevent_resource_group_deletion | Should the resource group be protected from accidental deletion? | bool | false | no |
+| name | The name of the existing resource group | string | n/a | yes |
 | lock | The lock configuration for the resource group | object | `{ kind = "None" }` | no |
-| tags | A mapping of tags to assign to the resource group | map(string) | `{}` | no |
 
 ## Outputs
 
