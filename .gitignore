@@ -6,9 +6,6 @@
 # Ignore VSCode settings
 .vscode/
 
-# Ignore Terraform variables files
-*.tfvars
-
 # Ignore Terraform state files
 .terraform/
 .terraform.lock.hcl
