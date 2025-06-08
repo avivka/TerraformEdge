@@ -1,6 +1,8 @@
-resource "azurerm_resource_group" "res-0" {
-  location = "eastus2"
+module "resource_group" {
+  source = "../Modules/resource_group"
+
   name     = "azure-rg"
+  location = "eastus2"
   tags = {
     LODManaged   = "lod"
     LabInstance  = "51008558"
@@ -14,10 +16,10 @@ resource "azurerm_resource_group" "res-0" {
 resource "azurerm_container_registry" "res-1" {
   location            = "eastus2"
   name                = "acr51008558050725"
-  resource_group_name = "azure-rg"
+  resource_group_name = module.resource_group.resource_group_name
   sku                 = "Standard"
   depends_on = [
-    azurerm_resource_group.res-0,
+    module.resource_group,
   ]
 }
 resource "azurerm_container_registry_scope_map" "res-2" {
@@ -25,7 +27,7 @@ resource "azurerm_container_registry_scope_map" "res-2" {
   container_registry_name = "acr51008558050725"
   description             = "Can perform all read, write and delete operations on the registry"
   name                    = "_repositories_admin"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-1,
   ]
@@ -35,7 +37,7 @@ resource "azurerm_container_registry_scope_map" "res-3" {
   container_registry_name = "acr51008558050725"
   description             = "Can pull any repository of the registry"
   name                    = "_repositories_pull"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-1,
   ]
@@ -45,7 +47,7 @@ resource "azurerm_container_registry_scope_map" "res-4" {
   container_registry_name = "acr51008558050725"
   description             = "Can perform all read operations on the registry"
   name                    = "_repositories_pull_metadata_read"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-1,
   ]
@@ -55,7 +57,7 @@ resource "azurerm_container_registry_scope_map" "res-5" {
   container_registry_name = "acr51008558050725"
   description             = "Can push to any repository of the registry"
   name                    = "_repositories_push"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-1,
   ]
@@ -65,7 +67,7 @@ resource "azurerm_container_registry_scope_map" "res-6" {
   container_registry_name = "acr51008558050725"
   description             = "Can perform all read and write operations on the registry"
   name                    = "_repositories_push_metadata_write"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-1,
   ]
@@ -73,10 +75,10 @@ resource "azurerm_container_registry_scope_map" "res-6" {
 resource "azurerm_container_registry" "res-7" {
   location            = "eastus2"
   name                = "acr51008558050825"
-  resource_group_name = "azure-rg"
+  resource_group_name = module.resource_group.resource_group_name
   sku                 = "Standard"
   depends_on = [
-    azurerm_resource_group.res-0,
+    module.resource_group,
   ]
 }
 resource "azurerm_container_registry_scope_map" "res-8" {
@@ -84,7 +86,7 @@ resource "azurerm_container_registry_scope_map" "res-8" {
   container_registry_name = "acr51008558050825"
   description             = "Can perform all read, write and delete operations on the registry"
   name                    = "_repositories_admin"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-7,
   ]
@@ -94,7 +96,7 @@ resource "azurerm_container_registry_scope_map" "res-9" {
   container_registry_name = "acr51008558050825"
   description             = "Can pull any repository of the registry"
   name                    = "_repositories_pull"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-7,
   ]
@@ -104,7 +106,7 @@ resource "azurerm_container_registry_scope_map" "res-10" {
   container_registry_name = "acr51008558050825"
   description             = "Can perform all read operations on the registry"
   name                    = "_repositories_pull_metadata_read"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-7,
   ]
@@ -114,7 +116,7 @@ resource "azurerm_container_registry_scope_map" "res-11" {
   container_registry_name = "acr51008558050825"
   description             = "Can push to any repository of the registry"
   name                    = "_repositories_push"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-7,
   ]
@@ -124,7 +126,7 @@ resource "azurerm_container_registry_scope_map" "res-12" {
   container_registry_name = "acr51008558050825"
   description             = "Can perform all read and write operations on the registry"
   name                    = "_repositories_push_metadata_write"
-  resource_group_name     = "azure-rg"
+  resource_group_name     = module.resource_group.resource_group_name
   depends_on = [
     azurerm_container_registry.res-7,
   ]
@@ -133,7 +135,7 @@ resource "azurerm_kubernetes_cluster" "res-13" {
   dns_prefix          = "aks-510085-azure-rg-23a9f4"
   location            = "eastus2"
   name                = "aks-51008558"
-  resource_group_name = "azure-rg"
+  resource_group_name = module.resource_group.resource_group_name
   default_node_pool {
     name    = "nodepool1"
     vm_size = "Standard_D2as_v5"
@@ -151,7 +153,7 @@ resource "azurerm_kubernetes_cluster" "res-13" {
     }
   }
   depends_on = [
-    azurerm_resource_group.res-0,
+    module.resource_group,
   ]
 }
 resource "azurerm_kubernetes_cluster_node_pool" "res-14" {
@@ -180,25 +182,25 @@ resource "azurerm_kubernetes_cluster_node_pool" "res-15" {
 resource "azurerm_user_assigned_identity" "res-16" {
   location            = "eastus2"
   name                = "aks-identity-7195945"
-  resource_group_name = "azure-rg"
+  resource_group_name = module.resource_group.resource_group_name
   depends_on = [
-    azurerm_resource_group.res-0,
+    module.resource_group,
   ]
 }
 resource "azurerm_user_assigned_identity" "res-17" {
   location            = "eastus2"
   name                = "kubelet-identity-7195945"
-  resource_group_name = "azure-rg"
+  resource_group_name = module.resource_group.resource_group_name
   depends_on = [
-    azurerm_resource_group.res-0,
+    module.resource_group,
   ]
 }
 resource "azurerm_log_analytics_workspace" "res-18" {
   location            = "eastus2"
   name                = "aks-51008558-law"
-  resource_group_name = "azure-rg"
+  resource_group_name = module.resource_group.resource_group_name
   depends_on = [
-    azurerm_resource_group.res-0,
+    module.resource_group,
   ]
 }
 resource "azurerm_log_analytics_saved_search" "res-19" {

@@ -1,5 +1,5 @@
-module "private" {
-  source     = "/"
+module "private_aks_cluster" {
+  source     = "../modules/aks"
   depends_on = [azurerm_role_assignment.private_dns_zone_contributor]
 
   name                       = var.name
