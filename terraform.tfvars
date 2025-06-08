@@ -74,7 +74,7 @@ spokes_landing_zone = [{
 # AKS Cluster Configuration
 aks_cluster_name = "aks-dev-cluster"
 aks_location = "North Europe"
-#aks_resource_group_name = "TESTLIOR-RG"
+aks_resource_group_name = "AKS-DEV-RG"
 aks_dns_prefix = "aks-dev-k8s"
 aks_kubernetes_version = "1.31.1"
 aks_sku_tier = "Standard"
