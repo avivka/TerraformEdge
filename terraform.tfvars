@@ -22,7 +22,7 @@ spokes_landing_zone = [{
   
   
    
-  spoke_resource_group_name    = "TESTLIOR-RG"
+  spoke_resource_group_name    = "NONPROD-NONSAP-AKS-RG"
   spoke_address_space          = "10.5.164.0/22"            #new vNET address
   spoke_dns_servers            = ["10.5.1.5", "10.216.1.4"] #new vNET DNS servers 
   spoke_location               = "North Europe"
