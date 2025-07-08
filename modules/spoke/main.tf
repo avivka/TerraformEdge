@@ -8,7 +8,7 @@ terraform {
   }
 }
 
-# Create a new vNET
+#Create a new vNET
 resource "azurerm_virtual_network" "spoke" {
   name                = var.spoke_name
   resource_group_name = var.spoke_resource_group_name
@@ -100,34 +100,4 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   use_remote_gateways          = false # set this to true after creating the hub vnet gateway
 provider = azurerm.source
 
-}
-
-
-# Additional security: Network Security Group rules for AKS subnet
-resource "azurerm_network_security_rule" "aks_outbound_https" {
-  name                        = "AllowHTTPSOutbound"
-  priority                    = 100
-  direction                   = "Outbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "443"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = var.resource_group_name
-  network_security_group_name = var.aks_nsg_name
-}
-
-resource "azurerm_network_security_rule" "aks_outbound_dns" {
-  name                        = "AllowDNSOutbound"
-  priority                    = 110
-  direction                   = "Outbound"
-  access                      = "Allow"
-  protocol                    = "Udp"
-  source_port_range           = "*"
-  destination_port_range      = "53"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = var.resource_group_name
-  network_security_group_name = var.aks_nsg_name
 }
