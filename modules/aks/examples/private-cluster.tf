@@ -8,11 +8,11 @@ data "azurerm_client_config" "current" {}
 
 # Create the private AKS cluster using the improved module
 module "private_aks" {
-  source = "./modules/aks_improved"
+  source = ".."
 
   # Basic configuration
   cluster_name        = "private-aks-cluster"
-  location           = "eastus2"
+  location           = "northeurope"
   resource_group_name = module.resource_group.resource_group_name
 
   # Private cluster configuration with enhanced security
@@ -30,8 +30,8 @@ module "private_aks" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"  # Improved networking with overlay mode
     network_policy      = "calico"   # Network policy enforcement
-    dns_service_ip      = "10.200.0.10"
-    service_cidr        = "10.200.0.0/16"
+    dns_service_ip      = "10.5.166.0"
+    service_cidr        = "10.5.166.0/22"
     load_balancer_sku   = "standard"
     outbound_type      = "userDefinedRouting"  # Route through firewall/NAT gateway
   }
@@ -167,14 +167,19 @@ module "private_aks" {
 
   # Tags for governance and cost management
   tags = {
-    Environment             = "Production"
-    Owner                  = "Platform Team"
-    CostCenter            = "IT"
-    Application           = "Kubernetes Platform"
-    Backup                = "Required"
-    MaintenanceWindow     = "Weekend"
-    SecurityClassification = "Internal"
-    Monitoring            = "Required"
+    rq_env = "Prod"
+    rq_invoice_group = "SAP"
+    rq_phase = "Unphased"
+    rq_SystemName = "AKS"
+    rq_subsystem = "SAP"
+    rq_SystemOwner = ""
+    rq_ITManager = "lior<>"
+    rq_SystemDescription = ""
+    rq_APPID = ""
+    rq_ResponsibleTeam = ""
+    rq_GlobalServersUpdates = ""
+    rq_Severity = "3"
+    rq_DR = ""
   }
 }
 
