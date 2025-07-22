@@ -1,90 +1,84 @@
-# Primary outputs
-output "cluster_id" {
-  description = "The ID of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.id
-}
-
-output "cluster_name" {
-  description = "The name of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.name
-}
-
-output "cluster_fqdn" {
-  description = "The FQDN of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.fqdn
-}
-
-output "cluster_private_fqdn" {
-  description = "The private FQDN of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.private_fqdn
-}
-
-# Kubernetes configuration
-output "kube_config" {
-  description = "Kubernetes configuration for the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.kube_config
-  sensitive   = true
-}
-
-output "kube_config_raw" {
-  description = "Raw Kubernetes configuration for the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.kube_config_raw
-  sensitive   = true
+output "aci_connector_object_id" {
+  description = "The object ID of the ACI Connector identity"
+  value       = try(azurerm_kubernetes_cluster.this.aci_connector_linux[0].connector_identity[0].object_id, null)
 }
 
 output "cluster_ca_certificate" {
-  description = "The cluster CA certificate"
-  value       = azurerm_kubernetes_cluster.this.kube_config.0.cluster_ca_certificate
+  description = "The CA certificate of the AKS cluster."
   sensitive   = true
+  value       = azurerm_kubernetes_cluster.this.kube_config
 }
 
 output "host" {
-  description = "The Kubernetes cluster server host"
-  value       = azurerm_kubernetes_cluster.this.kube_config.0.host
+  description = "The host of the AKS cluster API server."
   sensitive   = true
+  value       = azurerm_kubernetes_cluster.this.kube_config[0].host
 }
 
-# Identity outputs
-output "identity" {
-  description = "The identity block of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.identity
+output "ingress_app_object_id" {
+  description = "The object ID of the Ingress Application identity"
+  value       = try(azurerm_kubernetes_cluster.this.ingress_application_gateway[0].ingress_application_gateway_identity[0].object_id, null)
 }
 
-output "kubelet_identity" {
-  description = "The kubelet identity of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.kubelet_identity
+output "key_vault_secrets_provider_object_id" {
+  description = "The object ID of the key vault secrets provider."
+  value       = try(azurerm_kubernetes_cluster.this.key_vault_secrets_provider[0].secret_identity[0].object_id, null)
 }
 
-output "principal_id" {
-  description = "The principal ID of the system assigned identity"
-  value       = try(azurerm_kubernetes_cluster.this.identity[0].principal_id, null)
+output "kube_admin_config" {
+  description = "The kube_admin_config block of the AKS cluster, only available when Local Accounts & Role-Based Access Control (RBAC) with AAD are enabled."
+  sensitive   = true
+  value       = local.kube_admin_enabled ? azurerm_kubernetes_cluster.this.kube_admin_config : null
 }
 
-# Node pool outputs
-output "node_resource_group" {
-  description = "The auto-generated resource group which contains the resources for this AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.node_resource_group
+output "kube_config" {
+  description = "The kube_config block of the AKS cluster"
+  sensitive   = true
+  value       = azurerm_kubernetes_cluster.this.kube_config
 }
 
-output "node_pool_ids" {
-  description = "The IDs of the additional node pools"
-  value       = { for k, v in azurerm_kubernetes_cluster_node_pool.additional : k => v.id }
+output "kubelet_identity_id" {
+  description = "The identity ID of the kubelet identity."
+  value       = try(azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id, null)
 }
 
-# Network outputs
-output "effective_outbound_ips" {
-  description = "The effective outbound IP addresses of the cluster"
-  value       = try(azurerm_kubernetes_cluster.this.network_profile[0].load_balancer_profile[0].effective_outbound_ips, [])
+output "name" {
+  description = "Name of the Kubernetes cluster."
+  value       = azurerm_kubernetes_cluster.this.name
 }
 
-# Portal URL
-output "portal_fqdn" {
-  description = "The portal FQDN of the AKS cluster"
-  value       = azurerm_kubernetes_cluster.this.portal_fqdn
+output "node_resource_group_id" {
+  description = "The resource group ID of the node resource group."
+  value       = azurerm_kubernetes_cluster.this.node_resource_group_id
 }
 
-# OIDC issuer URL
+output "nodepool_resource_ids" {
+  description = "A map of nodepool keys to resource ids."
+  value = { for npk, np in module.nodepools : npk => {
+    resource_id = np.resource_id
+    name        = np.name
+    }
+  }
+}
+
 output "oidc_issuer_url" {
-  description = "The OIDC issuer URL that is associated with the cluster"
+  description = "The OIDC issuer URL of the Kubernetes cluster."
   value       = azurerm_kubernetes_cluster.this.oidc_issuer_url
+}
+
+output "private_endpoints" {
+  description = <<DESCRIPTION
+  A map of the private endpoints created.
+  DESCRIPTION
+  value       = var.private_endpoints_manage_dns_zone_group ? azurerm_private_endpoint.this_managed_dns_zone_groups : azurerm_private_endpoint.this_unmanaged_dns_zone_groups
+}
+
+output "resource_id" {
+  description = "Resource ID of the Kubernetes cluster."
+  value       = azurerm_kubernetes_cluster.this.id
+}
+
+output "web_app_routing_object_id" {
+  description = "The object ID of the web app routing identity"
+  value       = try(azurerm_kubernetes_cluster.this.web_app_routing[0].web_app_routing_identity[0].object_id, null)
 }
