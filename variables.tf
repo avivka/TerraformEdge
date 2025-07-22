@@ -45,8 +45,7 @@ variable "aks" {
     dns_prefix            = string
     kubernetes_version    = string
     network_profile       = object({
-      network_plugin_mode = string
-      network_policy      = string
+      network_plugin      = string
     })
     tags                  = map(string)
   })
