@@ -18,3 +18,7 @@ terraform-provider-*
 
 # Ignore Terraform CLI configuration files
 terraform.rc
+
+# IDE related
+.idea/
+*.vscode/
