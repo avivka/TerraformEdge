@@ -4,7 +4,9 @@
 #represent a list of "spokes", each with its own configuration
 locals {
   spoke_map_landing_zone = { for s in var.spokes_landing_zone : s.spoke_name => s }
+  aks = var.aks
 }
+
 
 
 #call the spoke module for each spoke in the list
@@ -29,4 +31,24 @@ module "spokes_landing_zone" {
     azurerm.destination = azurerm.sub-hub
   }
 
+}
+
+module "aks" {
+  source              = "./modules/aks"
+  name                = local.aks.name
+  default_node_pool   = local.aks.default_node_pool
+  node_pools          = local.aks.node_pools
+  resource_group_name = local.aks.resource_group_name
+  location            = local.aks.location
+  dns_prefix          = local.aks.dns_prefix
+  kubernetes_version  = local.aks.kubernetes_version
+  network_profile     = local.aks.network_profile
+  tags                = local.aks.tags
+  depends_on          = [module.spokes_landing_zone]
+  
+  providers = {
+    azurerm.source = azurerm.sub-nonsap-nonprod
+    #azurerm.source = azurerm.PROD
+    azurerm.destination = azurerm.sub-hub
+  }
 }

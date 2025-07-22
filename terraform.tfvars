@@ -70,3 +70,26 @@ spokes_landing_zone = [{
   ]
 
 }]
+
+aks = {
+  name                = "aks-dev-cluster"
+  default_node_pool   = {
+    name            = "default"
+    vm_size         = "Standard_DS2_v2"
+    os_disk_size_gb = 30
+    node_count      = 3
+  }
+  node_pools         = []
+  resource_group_name = "NONPROD-NONSAP-AKS-RG"
+  location            = "North Europe"
+  dns_prefix          = "aksdev"
+  kubernetes_version  = "1.27.6"
+  network_profile     = {
+    network_plugin_mode = "overlay"
+    network_policy      = "cilium"
+  }
+  tags                = {
+    environment = "nonprod"
+    team        = "nonsap"
+  }
+}

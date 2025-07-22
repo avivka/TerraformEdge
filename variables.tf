@@ -24,3 +24,30 @@ variable "spokes_landing_zone" {
 
   }))
 }
+
+variable "aks" {
+  type = object({
+    name                = string
+    default_node_pool   = object({
+      name            = string
+      vm_size         = string
+      os_disk_size_gb = number
+      node_count      = number
+    })
+    node_pools         = list(object({
+      name            = string
+      vm_size         = string
+      os_disk_size_gb = number
+      node_count      = number
+    }))
+    resource_group_name = string
+    location            = string
+    dns_prefix          = string
+    kubernetes_version  = string
+    network_profile     = object({
+      network_plugin_mode = string
+      network_policy      = string
+    })
+    tags                = map(string)
+  })
+}
