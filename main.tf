@@ -45,10 +45,5 @@ module "aks" {
   network_profile     = local.aks.network_profile
   tags                = local.aks.tags
   depends_on          = [module.spokes_landing_zone]
-  
-  providers = {
-    azurerm.source = azurerm.sub-nonsap-nonprod
-    #azurerm.source = azurerm.PROD
-    azurerm.destination = azurerm.sub-hub
-  }
+
 }
