@@ -291,7 +291,7 @@ variable "disk_encryption_set_id" {
 variable "dns_prefix" {
   type        = string
   default     = null
-  description = "The DNS prefix specified when creating the managed cluster. If you do not specify one, a random prefix will be generated."
+  description = "The DNS prefix specified when creating the managed cluster."
 
   validation {
     condition     = var.dns_prefix == null || can(regex("^[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,52}[a-zA-Z0-9])?$", var.dns_prefix))
@@ -600,10 +600,10 @@ variable "network_profile" {
     condition     = var.network_profile.network_policy != "cilium" || var.network_profile.network_plugin == "azure"
     error_message = "When the network policy is set to cilium, the network_plugin field can only be set to azure."
   }
-  validation {
-    condition     = var.network_profile.network_policy != "cilium" || var.network_profile.network_plugin_mode == "overlay" || var.default_node_pool.pod_subnet_id != null
-    error_message = "When the network policy is set to cilium, one of either network_plugin_mode = `overlay` or pod_subnet_id must be specified."
-  }
+  # validation {
+  #   condition     = var.network_profile.network_policy != "cilium" || var.network_profile.network_plugin_mode == "overlay" || var.default_node_pool.pod_subnet_id != null
+  #   error_message = "When the network policy is set to cilium, one of either network_plugin_mode = `overlay` or pod_subnet_id must be specified."
+  # }
 }
 
 variable "node_os_channel_upgrade" {
