@@ -79,7 +79,7 @@ aks = {
     max_count                    = 4
     max_pods                     = 30
     min_count                    = 2
-    vnet_subnet_id               = azurerm_subnet.subnet.id
+    vnet_subnet_id               = azurerm_subnet.spoke_subnets[each.key].id
     only_critical_addons_enabled = true
 
     upgrade_settings = {

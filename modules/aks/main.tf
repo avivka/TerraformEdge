@@ -621,3 +621,35 @@ resource "azurerm_role_assignment" "this" {
   role_definition_name                   = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? null : each.value.role_definition_id_or_name
   skip_service_principal_aad_check       = each.value.skip_service_principal_aad_check
 }
+
+resource "azurerm_private_dns_zone" "zone" {
+  name                = "privatelink.${azurerm_resource_group.this.location}.azmk8s.io"
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "vnet_link" {
+  name                  = "privatelink-${azurerm_resource_group.this.location}-azmk8s-io"
+  private_dns_zone_name = azurerm_private_dns_zone.zone.name
+  resource_group_name   = azurerm_resource_group.this.name
+  virtual_network_id    = azurerm_virtual_network.vnet.id
+}
+
+resource "azurerm_user_assigned_identity" "identity" {
+  location            = azurerm_resource_group.this.location
+  name                = "aks-identity"
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+resource "azurerm_role_assignment" "private_dns_zone_contributor" {
+  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+  scope                = azurerm_private_dns_zone.zone.id
+  role_definition_name = "Private DNS Zone Contributor"
+}
+
+resource "random_string" "dns_prefix" {
+  length  = 10    # Set the length of the string
+  lower   = true  # Use lowercase letters
+  numeric = true  # Include numbers
+  special = false # No special characters
+  upper   = false # No uppercase letters
+}
