@@ -108,6 +108,7 @@ variable "default_node_pool" {
 
 variable "location" {
   type        = string
+  default     = "northeurope"
   description = "Azure region where the resource should be deployed."
   nullable    = false
 }
