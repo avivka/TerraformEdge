@@ -6,13 +6,13 @@ terraform {
     }
   }
 
-  backend "azurerm" {
-      resource_group_name = "NONPROD-NONSAP-APP-IACS-RG"
-      storage_account_name = "saiacatomation"
-      container_name = "vnetcreation"
-      key = "terraform.tfstate"
-      subscription_id = "36345da4-d9b3-43c5-80d5-81cd4fc0035d"
-  }
+  # backend "azurerm" {
+  #     resource_group_name = "NONPROD-NONSAP-APP-IACS-RG"
+  #     storage_account_name = "saiacatomation"
+  #     container_name = "vnetcreation"
+  #     key = "terraform.tfstate"
+  #     subscription_id = "36345da4-d9b3-43c5-80d5-81cd4fc0035d"
+  # }
 }
 
 provider "azurerm" {

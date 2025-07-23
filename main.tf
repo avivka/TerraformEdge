@@ -37,11 +37,11 @@ module "aks" {
   source              = "./modules/aks"
   name                = local.aks.name
   default_node_pool   = local.aks.default_node_pool
-  node_pools          = local.aks.node_pools
   resource_group_name = local.aks.resource_group_name
   location            = local.aks.location
   dns_prefix          = local.aks.dns_prefix
   kubernetes_version  = local.aks.kubernetes_version
+  managed_identities  = local.aks.managed_identities
   network_profile     = local.aks.network_profile
   tags                = local.aks.tags
   depends_on          = [module.spokes_landing_zone]

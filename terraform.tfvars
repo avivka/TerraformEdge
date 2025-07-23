@@ -79,14 +79,19 @@ aks = {
     os_disk_size_gb = 30
     node_count      = 3
   }
-  node_pools         = []
+  node_pools         = {}
   resource_group_name = "NONPROD-NONSAP-AKS-RG"
   location            = "North Europe"
   dns_prefix          = "aksdev"
-  kubernetes_version  = "1.27.6"
+  kubernetes_version  = "1.32.0"
   network_profile     = {
     network_plugin_mode = "overlay"
     network_policy      = "cilium"
+    network_plugin      = "azure"
+    }
+  }
+  managed_identities    = {
+    type = "SystemAssigned"
   }
   tags                = {
     environment = "nonprod"

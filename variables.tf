@@ -44,6 +44,9 @@ variable "aks" {
     location              = string
     dns_prefix            = string
     kubernetes_version    = string
+    managed_identities    = object({
+      type = string
+    })
     network_profile       = object({
       network_plugin      = string
     })
