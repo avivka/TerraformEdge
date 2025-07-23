@@ -34,16 +34,19 @@ module "spokes_landing_zone" {
 }
 
 module "aks" {
-  source              = "./modules/aks"
-  name                = local.aks.name
-  default_node_pool   = local.aks.default_node_pool
-  resource_group_name = local.aks.resource_group_name
-  location            = local.aks.location
-  dns_prefix          = local.aks.dns_prefix
-  kubernetes_version  = local.aks.kubernetes_version
-  managed_identities  = local.aks.managed_identities
-  network_profile     = local.aks.network_profile
-  tags                = local.aks.tags
-  depends_on          = [module.spokes_landing_zone]
-
+  source                                           = "./modules/aks"
+  default_node_pool                                = local.aks.default_node_pool
+  location                                         = local.aks.location
+  name                                             = local.aks.name
+  resource_group_name                              = local.aks.resource_group_name
+  azure_active_directory_role_based_access_control = local.aks.azure_active_directory_role_based_access_control
+  dns_prefix_private_cluster                       = local.aks.dns_prefix_private_cluster
+  managed_identities                               = local.aks.managed_identities
+  network_profile                                  = local.aks.network_profile
+  node_pools                                       = local.aks.node_pools
+  private_cluster_enabled                          = local.aks.private_cluster_enabled
+  private_dns_zone_id                              = local.aks.private_dns_zone_id
+  sku_tier                                         = local.aks.sku_tier
+  tags                                             = local.aks.tags
+  depends_on                                       = [module.spokes_landing_zone, azurerm_role_assignment.private_dns_zone_contributor]
 }

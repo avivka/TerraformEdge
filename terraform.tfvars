@@ -72,29 +72,75 @@ spokes_landing_zone = [{
 }]
 
 aks = {
-  name                = "aks-dev-cluster"
-  default_node_pool   = {
-    name            = "default"
-    vm_size         = "Standard_DS2_v2"
-    os_disk_size_gb = 30
-    node_count      = 3
+  default_node_pool = {
+    name                         = "default"
+    vm_size                      = "Standard_DS2_v2"
+    auto_scaling_enabled         = true
+    max_count                    = 4
+    max_pods                     = 30
+    min_count                    = 2
+    vnet_subnet_id               = azurerm_subnet.subnet.id
+    only_critical_addons_enabled = true
+
+    upgrade_settings = {
+      max_surge = "10%"
+    }
   }
-  node_pools         = {}
-  resource_group_name = "NONPROD-NONSAP-AKS-RG"
   location            = "North Europe"
-  dns_prefix          = "aksdev"
+  name                = "aks-dev-cluster"
+  resource_group_name = "NONPROD-NONSAP-AKS-RG"
+  azure_active_directory_role_based_access_control = {
+    azure_rbac_enabled = true
+    tenant_id          = "6d8a8294-466a-4e67-9658-4cb9250a19ef"
+  }
+  dns_prefix_private_cluster =  "aksdev"
+  managed_identities = {
+    system_assigned            = false
+    user_assigned_resource_ids = [azurerm_user_assigned_identity.identity.id]
+  }
   kubernetes_version  = "1.32.0"
   network_profile     = {
     network_plugin_mode = "overlay"
     network_policy      = "cilium"
+    dns_service_ip = "10.10.200.10"
+    service_cidr   = "10.10.200.0/24"
     network_plugin      = "azure"
+  }
+  node_pools = {
+    unp1 = {
+      name                 = "userpool1"
+      vm_size              = "Standard_DS2_v2"
+      auto_scaling_enabled = true
+      max_count            = 4
+      max_pods             = 30
+      min_count            = 2
+      os_disk_size_gb      = 128
+      vnet_subnet_id       = azurerm_subnet.unp1_subnet.id
+
+      upgrade_settings = {
+        max_surge = "10%"
+      }
+    }
+    unp2 = {
+      name                 = "userpool2"
+      vm_size              = "Standard_DS2_v2"
+      auto_scaling_enabled = true
+      max_count            = 4
+      max_pods             = 30
+      min_count            = 2
+      os_disk_size_gb      = 128
+      vnet_subnet_id       = azurerm_subnet.unp2_subnet.id
+
+      upgrade_settings = {
+        max_surge = "10%"
+      }
     }
   }
-  managed_identities    = {
-    type = "SystemAssigned"
-  }
-  tags                = {
-    environment = "nonprod"
-    team        = "nonsap"
+  private_cluster_enabled = true
+  private_dns_zone_id     = azurerm_private_dns_zone.zone.id
+  sku_tier                = "Standard"
+  tags = {
+    "environment" = "nonprod"
+    "team"        = "nonsap"
   }
 }
